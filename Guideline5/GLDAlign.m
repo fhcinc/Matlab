@@ -94,7 +94,7 @@ t2 = GLDFile(eogFile);
         else
             offset_lf= 1;
         end
-        nEogChannels = length(t1.segments(nseg).channels); % number of EOG channels (on the second device)
+        nEogChannels = length(t1.segments(nseg).channels); % number of EOG channels (on the first device)
         for j = 1:nEogChannels
             if(~isempty( t1.segments(nseg).channels(j).LF ))
                 t1.segments(nseg).channels(j).LF = t1.segments(nseg).channels(j).LF(int32(offset_lf):end);
@@ -106,6 +106,10 @@ t2 = GLDFile(eogFile);
         if(isfield(t1.segments(nseg), 'sync'))
             if(isfield(t1.segments(nseg).sync, 'rt_timestamps'))
                 rt_align = double(t1.segments(nseg).sync.rt_timestamps) - ts_mer + 5;
+                % Only keep the positive timestamps, because the negative
+                % ones correspond to the discarded MER samples.
+                rt_align = rt_align(rt_align >= 0);
+                
                 ts_rt = rt_align/sf_mer;
                 digin = zeros(1, length(mer_length));
                 state = 0;

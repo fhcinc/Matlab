@@ -70,6 +70,22 @@ t2 = GLDFile(eogFile);
             end
         end
 
+        % Align Analog input channels 
+        if(~isempty(t1.segments(nseg).aux))
+            n_auxChannels = length(t1.segments(nseg).aux.channels);
+            sf_aux = t1.segments(nseg).aux.sampling_rate;
+            offset_aux = int32(ceil( (double(offset_mer)/double(sf_mer)) * double(sf_aux) + 0.5));
+            if(offset_aux > 1)
+                for j = 1:n_auxChannels
+                    if(~isempty(t1.segments(nseg).aux.channels(j).continuous))
+                        t1.segments(nseg).aux.channels(j).continuous = ... 
+                            t1.segments(nseg).aux.channels(j).continuous(int32(offset_aux):end);
+                    end
+                end
+            end
+        end
+        
+        
         %Align EOG channels on the second (Lf) interface        
         nEogChannels = length(t2.segments(nseg).channels); % number of EOG channels (on the second device)
         for j = 1:nEogChannels

@@ -290,9 +290,16 @@ ADS_EVENT_ZCHECK_VALUES   =              hex2dec( '90011008');
 %%//** This code is useful for software playback to separate recordings in the same data file
 ADS_EVENT_STOP_REC        =              hex2dec( '90011009');
 ADS_EVENT_START_REC       =              hex2dec( '90011010');
+%%/**
+%%1. Message code: ADS_EVENT_START_REC_DATETIME
+%%2. Message Length: 2
+%%3. Contents: DateTime of the start of the segment recording (Int64)
+%%*/
+ADS_EVENT_START_REC_DATETIME =              hex2dec( '90011011');
 %%
 %%/*This code is used for software playback to identify classification events in the same data file */
 ADS_EVENT_CLASSIFICATION  =              hex2dec( '9001100A');
+%%
 %%#endif 
 %%
 %%/******************************************************************************
@@ -1679,6 +1686,23 @@ HMS_EVENT_LFS_SAMPLING_RATE =              hex2dec( '9020001C');
 %%4. Reset:				integer; values { 1 }
 %%*/
 HMS_EVENT_BOARD_RESET     =              hex2dec( '9020001D');
+%%
+%%/**
+%%Microelectrode data sample rate event.
+%%1. Function Code: 		     HMS_ANALOG_FILTER_ACTIVE_MAP
+%%2. Message Length: 		     2
+%%3. Device Identifier:	     integer; values { 0, 1 .. }
+%%4. Analog Filter Active Map: integer; 
+%%   Channel numbering starts from the least significant bit
+%%towards the MSB. A value of 1 in the corresponding bit denotes an active analog
+%%filter on that channel and a value of zero, an inactive filter.
+%%For eight channels, the map is:
+%%-----------------------------------------
+%%|B7  |B6  |B5  |B4  |B3  |B2  |B1  |B0  |
+%%|CH8 |CH7 |CH6 |CH5 |CH4 |CH3 |CH2 |CH1 |
+%%-----------------------------------------
+%%*/
+HMS_ANALOG_FILTER_ACTIVE_MAP =              hex2dec( '9020001E');
 %%
 %%/******************************************************************************
 %%* LFP Data codes

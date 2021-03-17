@@ -862,6 +862,17 @@ while( count <= size(fileData,1) )
                 data = fileData(count);
                 count = count + 1;     
             end
+        elseif(msg_code == ADS_EVENT_START_REC_DATETIME)
+            d1 = int64(fileData(count));
+            count = count+1;
+            d2= (fileData(count));
+            count = count+1;
+            % The data is stored in little endian format. 
+            % Must confirm that this holds on other machines if the file
+            % format is preserved.
+            % This is the start timestamp for each segment
+            start_time = int64( bitor( bitshift(int64(d2), 32), int64(d1)));
+            t.segments(nSegment).start_time = start_time;
         elseif(msg_code == CPM_TEMP_EVENT_LOCAL)
             %Extract temperature data, in degrees Celsius, not stored. 
             data = fileData(count);
